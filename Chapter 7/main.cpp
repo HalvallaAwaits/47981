@@ -269,13 +269,13 @@ void prob3(){
      //Function Prototypes
      void getFood(float[][DYSPWK],int);
      float avgFood(float[][DYSPWK],int);
-     float fLeast(float[][DYSPWK],int);
-     float fMost(float[][DYSPWK],int);
+     float fLeast(float[][DYSPWK],int,int &);
+     float fMost(float[][DYSPWK],int,int &);
      
      //Declare Variables
      const int MNKYS=3;
      float food[MNKYS][DYSPWK];
-     float avg, least, most;
+     int lMonk=0, mMonk=0;//stores the monkey in which the most or least food was eaten
      
      //Prompt user for food values
      getFood(food,MNKYS);
@@ -286,11 +286,11 @@ void prob3(){
          
      //Find least food eaten
      cout<<"The least amount of food eaten was "
-         <<fLeast(food,MNKYS)<<endl<<endl;
+         <<fLeast(food,MNKYS,lMonk)<<" by Monkey "<<(lMonk+1)<<"."<<endl<<endl;
      
      //Find most food eaten
      cout<<"The largest amount of food eaten was "
-         <<fMost(food,MNKYS)<<endl<<endl;
+         <<fMost(food,MNKYS, mMonk)<<" by Monkey "<<(mMonk+1)<<"."<<endl<<endl;
          
 }//End Gaddis Chap7 Prob4
 
@@ -321,30 +321,30 @@ float avgFood(float a[][DYSPWK],int n){
       return avg;
 }
 
-float fLeast(float a[][DYSPWK],int n){
-      float low=a[0];
-      lt=0;
-      
+float fLeast(float a[][DYSPWK],int n,int &m){
+      float low;
+      int lm;//stores which monkey had the lowest
       for (int i=0;i<n;i++){
          for (int j=0;j<DYSPWK;j++){
-             if (a[i]<low){
-                low=a[i];
-                lt=i;
+             if (a[i][j]<low){
+                low=a[i][j];
+                lm=i;
              }
          }
       }
       return low;
 }
 
-float fMost(float a[][DYSPWK],int n){
-      int high=a[0];
-      ht=0;
-    
+float fMost(float a[][DYSPWK],int n,int &m){
+      float high;
+      int mm;//stores which monkey had the lowest
       for (int i=0;i<n;i++){
-          if (a[i]>high){
-             high=a[i];
-             ht=i;
-          }
+         for (int j=0;j<DYSPWK;j++){
+             if (a[i][j]>high){
+                high=a[i][j];
+                mm=i;
+             }
+         }
       }
       return high;
 }
