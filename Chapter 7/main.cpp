@@ -321,9 +321,8 @@ float avgFood(float a[][DYSPWK],int n){
       return avg;
 }
 
-float fLeast(float a[][DYSPWK],int n,int &m){
-      float low;
-      int lm;//stores which monkey had the lowest
+float fLeast(float a[][DYSPWK],int n,int &lm){
+      float low=a[0][0];
       for (int i=0;i<n;i++){
          for (int j=0;j<DYSPWK;j++){
              if (a[i][j]<low){
@@ -335,9 +334,8 @@ float fLeast(float a[][DYSPWK],int n,int &m){
       return low;
 }
 
-float fMost(float a[][DYSPWK],int n,int &m){
-      float high;
-      int mm;//stores which monkey had the lowest
+float fMost(float a[][DYSPWK],int n,int &mm){
+      float high=a[0][0];
       for (int i=0;i<n;i++){
          for (int j=0;j<DYSPWK;j++){
              if (a[i][j]>high){
