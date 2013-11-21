@@ -292,7 +292,7 @@ void prob3(){
      cout<<"The largest amount of food eaten was "
          <<fMost(food,MNKYS, mMonk)<<" by Monkey "<<(mMonk+1)<<"."<<endl<<endl;
          
-}//End Gaddis Chap7 Prob4
+}//End Main for Gaddis Chap7 Prob4
 
 void getFood(float a[][DYSPWK],int n){
      cout<<"Calculating the food consumption of monkeys in the zoo!"<<endl;
@@ -345,10 +345,17 @@ float fMost(float a[][DYSPWK],int n,int &mm){
          }
       }
       return high;
-}
+}//End Gaddis Chap7 Prob4
+
 
 //Begin Gaddis Chap7 Prob5
 void prob4(){
+    //Function Prototypes
+    
+    
+    //Declare Variables
+    
+    
     
 }//End Gaddis Chap7 Prob5
 
