@@ -6,10 +6,12 @@
 //Libraries
 #include <iostream>
 #include <string>
+#include <fstream>
 using namespace std;
 
 //Global Constants
-const int DYSPWK=7;
+const int DYSPWK=7;//used for Gaddis Chap7 Prob4 for 2d array
+const int DYSPM=30;//used for Gaddis Chap7 Prob5 for 2d array
 
 //Function Prototypes
 void Menu();
@@ -351,15 +353,46 @@ float fMost(float a[][DYSPWK],int n,int &mm){
 //Begin Gaddis Chap7 Prob5
 void prob4(){
     //Function Prototypes
-    
+    void gtrain(char [][DYSPM],int);
     
     //Declare Variables
+    const int MNTHS=3;
+    char wthr[MNTHS][DYSPM];
     
+    //gather input from file
+    gtrain(wthr,MNTHS);
     
+    //output test
+    cout<<"Weather data pulled from file rainyday.txt"<<endl<<endl;
+    for(int i=0;i<MNTHS;i++){
+             cout<<"Weather by day for Month "<<i+1;
+             for(int j=0;j<DYSPM;j++){
+                     if(j%10==0)cout<<endl;
+                     cout<<wthr[i][j]<<" ";
+             }
+             cout<<endl<<endl;
+     }
     
 }//End Gaddis Chap7 Prob5
 
-
+void gtrain(char a[][DYSPM],int n){
+     char day;//stores day status (rainy, sunny or cloudy)
+     
+     //Open the file
+     ifstream inputFile;
+     inputFile.open("rainyday.txt");
+     
+     //Get rain data from file
+     for(int i=0;i<n;i++){
+             for(int j=0;j<DYSPM;j++){
+                     inputFile>>day;
+                     a[i][j]=day;
+             }
+     }
+     
+     //Close the file
+     inputFile.close();
+}
 
 
 
