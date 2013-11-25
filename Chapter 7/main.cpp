@@ -7,6 +7,8 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <iomanip>
+#include <vector>
 using namespace std;
 
 //Global Constants
@@ -354,33 +356,95 @@ float fMost(float a[][DYSPWK],int n,int &mm){
 void prob4(){
     //Function Prototypes
     void gtrain(char [][DYSPM],int);
+    void june(char [][DYSPM],int,int &,int &, int &);
+    void july(char [][DYSPM],int,int &,int &, int &);
+    void august(char [][DYSPM],int,int &,int &, int &);
+    void rainAll(char [][DYSPM],int, int &,int &, int &);
+    string mstRain(int,int,int);
     
     //Declare Variables
     const int MNTHS=3;
     char wthr[MNTHS][DYSPM];
+    int rJun=0,cJun=0,sJun=0;
+    int rJul=0,cJul=0,sJul=0;
+    int rAug=0,cAug=0,sAug=0;
+    int rAll=0,cAll=0,sAll=0;
+    string mnthMst;
     
     //gather input from file
     gtrain(wthr,MNTHS);
     
-    //output test
-    cout<<"Weather data pulled from file rainyday.txt"<<endl<<endl;
-    for(int i=0;i<MNTHS;i++){
-             cout<<"Weather by day for Month "<<i+1;
-             for(int j=0;j<DYSPM;j++){
-                     if(j%10==0)cout<<endl;
-                     cout<<wthr[i][j]<<" ";
-             }
-             cout<<endl<<endl;
-     }
+    //count rainy, cloudy and sunny days for each month and output
+    june(wthr,MNTHS,rJun,cJun,sJun);
+    cout<<"Stats for June"<<endl<<"Rainy Days:  "
+        <<setw(3)<<rJun<<endl<<"Cloudy Days: "<<setw(3)<<cJun<<endl
+        <<"Sunny Days:  "<<setw(3)<<sJun<<endl<<endl;
+    july(wthr,MNTHS,rJul,cJul,sJul);
+    cout<<"Stats for July"<<endl<<"Rainy Days:  "
+        <<setw(3)<<rJul<<endl<<"Cloudy Days: "<<setw(3)<<cJul<<endl
+        <<"Sunny Days:  "<<setw(3)<<sJul<<endl<<endl;
+    august(wthr,MNTHS,rAug,cAug,sAug);
+    cout<<"Stats for August"<<endl<<"Rainy Days:  "
+        <<setw(3)<<rAug<<endl<<"Cloudy Days: "<<setw(3)<<cAug<<endl
+        <<"Sunny Days:  "<<setw(3)<<sAug<<endl<<endl;
+        
+    //count rainy, cloudy and sunny days for all three months combined
+    rainAll(wthr,MNTHS,rAll,cAll,sAll);
+    cout<<"Total"<<endl<<"Rainy Days:  "
+        <<setw(3)<<rAll<<endl<<"Cloudy Days: "<<setw(3)<<cAll<<endl
+        <<"Sunny Days:  "<<setw(3)<<sAll<<endl<<endl;
     
-}//End Gaddis Chap7 Prob5
+    //determine which month had the most rain
+    cout<<mstRain(rJun,rJul,rAug)<<" had the most rainfall."<<endl<<endl;
+    
+}
+
+void june(char a[][DYSPM],int n,int &rJun,int &cJun, int &sJun){
+     for(int i=0;i<DYSPM;i++){
+             if(a[0][i]=='R')rJun++;
+             if(a[0][i]=='C')cJun++;
+             if(a[0][i]=='S')sJun++;
+     }
+}
+
+void july(char a[][DYSPM],int n,int &rJul,int &cJul, int &sJul){
+     for(int i=0;i<DYSPM;i++){
+             if(a[1][i]=='R')rJul++;
+             if(a[1][i]=='C')cJul++;
+             if(a[1][i]=='S')sJul++;
+     }
+}
+
+void august(char a[][DYSPM],int n,int &rAug,int &cAug, int &sAug){
+     for(int i=0;i<DYSPM;i++){
+             if(a[2][i]=='R')rAug++;
+             if(a[2][i]=='C')cAug++;
+             if(a[2][i]=='S')sAug++;
+     }
+}
+
+void rainAll(char a[][DYSPM],int n,int &rAll,int &cAll, int &sAll){
+     for(int i=0;i<n;i++){
+             for(int j=0;j<DYSPM;j++){
+                     if(a[i][j]=='R')rAll++;
+                     if(a[i][j]=='C')cAll++;
+                     if(a[i][j]=='S')sAll++;
+             }
+     }
+}
+
+string mstRain(int rju, int rjul, int ra){
+    if(rju>rjul&&rju>ra)return "June";
+    if(rjul>rju&&rjul>ra)return "July";
+    if(ra>rju&&ra>rjul)return "August";
+}
 
 void gtrain(char a[][DYSPM],int n){
      char day;//stores day status (rainy, sunny or cloudy)
      
      //Open the file
      ifstream inputFile;
-     inputFile.open("rainyday.txt");
+     inputFile.open("RainOrShine.dat");
      
      //Get rain data from file
      for(int i=0;i<n;i++){
@@ -393,18 +457,19 @@ void gtrain(char a[][DYSPM],int n){
      //Close the file
      inputFile.close();
 }
-
+//End Gaddis Chap7 Prob5
 
 
 
 //Begin Gaddis Chap7 Prob6
 void prob5(){
     
-}//End Gaddis Chap7 Prob 6
+}
 
    
+
    
-   
+//End Gaddis Chap7 Prob 6
    
 
 //Begin Gaddis Chap7 Prob7
