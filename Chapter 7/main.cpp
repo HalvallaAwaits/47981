@@ -14,6 +14,7 @@ using namespace std;
 //Global Constants
 const int DYSPWK=7;//used for Gaddis Chap7 Prob4 for 2d array
 const int DYSPM=30;//used for Gaddis Chap7 Prob5 for 2d array
+const int QRTRS=4;//used for Gaddis Chap7 Prob7 for 2d array
 
 //Function Prototypes
 void Menu();
@@ -463,21 +464,207 @@ void gtrain(char a[][DYSPM],int n){
 
 //Begin Gaddis Chap7 Prob6
 void prob5(){
+    //Function Prototypes
+    void getNums(int [],int);
+    int lwNums(int [],int);
+    int hghNums(int [],int);
+    int ttlNums(int [],int);
+    int avgNums(int [],int);
+    
+    //Declare variables
+    const int SIZE=20;
+    int nums[SIZE];
+    
+    //get file name and input from file
+    getNums(nums,SIZE);
+    
+    //find lowest value
+    cout<<"The lowest number is: "<<lwNums(nums,SIZE)<<endl;
+    
+    //find highest value
+    cout<<"The highest number is: "<<hghNums(nums,SIZE)<<endl;
+    
+    //find total of values
+    cout<<"The total of all number is: "<<ttlNums(nums,SIZE)<<endl;
+    
+    //find average value
+    cout<<"The average of the number is: "<<avgNums(nums,SIZE)<<endl<<endl;
     
 }
 
-   
+int avgNums(int a[],int n){
+    int ttl=0;
+    int avg=0;
+    
+    for(int i=0;i<n;i++){
+            ttl+=a[i];
+    }
+    avg=ttl/n;
+    return avg;
+}
 
-   
+int ttlNums(int a[],int n){
+    int ttl=0;
+    
+    for(int i=0;i<n;i++){
+            ttl+=a[i];
+    }
+    
+    return ttl;
+}
+
+int hghNums(int a[],int n){
+    int high=a[0];
+    
+    for(int i=0;i<n;i++){
+            if(a[i]>high)high=a[i];
+    }
+    
+    return high;
+}
+
+int lwNums(int a[],int n){
+    int low=a[0];
+    
+    for(int i=0;i<n;i++){
+            if(a[i]<low)low=a[i];
+    }
+    
+    return low;
+}
+
+void getNums(int a[],int n){
+     char fName[25];//holds file name given by user
+     
+     //get file name from user
+     cout<<"This program will read in a file of 20 integers "<<endl
+         <<"(each on a separate line) and analyze the integers."<<endl<<endl;
+     cout<<"Please enter the entire filename (ex:'numbers.txt') and"<<endl
+         <<"make sure the file is within this program's folder as well."<<endl<<endl;
+     cin>>fName;
+     
+     //open file
+     ifstream inputFile;
+     inputFile.open(fName);
+     
+     //fill array
+     for(int i=0;i<n;i++){
+             inputFile>>a[i];
+     }
+     
+     //close file
+     inputFile.close();  
+}
 //End Gaddis Chap7 Prob 6
    
 
 //Begin Gaddis Chap7 Prob7
 void prob6(){
+    //Function Prototypes
+    void getFigs(float [][QRTRS],int);
+    void lstSls(float [][QRTRS],int,int);
+    void qrtCmpr(float [][QRTRS],int,int);
+    float qrtTtl(float [][QRTRS],int,int);
+    void ttlCmpr(float [][QRTRS],int,int);
+    float divAvg(float [][QRTRS],int,int);
+    float hghDiv(float [][QRTRS],int,int,int &);
     
+    //Declare variables
+    const int DIVISIONS=6;
+    float qrtrSls[DIVISIONS][QRTRS];
+    float hAmt=0;//highest division amount 
+    int hDiv=0;//highest division #
+    
+    //get data from user
+    getFigs(qrtrSls,DIVISIONS);
+        
+    //display specific details for each quarter
+    for(int qrtr=0;qrtr<QRTRS;qrtr++){
+        cout<<"Quarter "<<qrtr+1<<" figures:"<<endl;
+        //display sales for each division
+        lstSls(qrtrSls,DIVISIONS, qrtr);
+        //each division's change from last quarter (skip for first)
+        if(qrtr!=0)qrtCmpr(qrtrSls,DIVISIONS,qrtr);
+        //total sales for quarter
+        cout<<"Quarter "<<qrtr+1<<"'s total sales: $"
+            <<qrtTtl(qrtrSls,DIVISIONS,qrtr)<<endl;
+        //company's total increase from last quarter (skip for first)
+        if(qrtr!=0)ttlCmpr(qrtrSls,DIVISIONS,qrtr);
+        //division sale average
+        cout<<"Division avg this quarter: $"<<divAvg(qrtrSls,DIVISIONS,qrtr)<<endl;
+        //division with highest sales
+        hAmt=hghDiv(qrtrSls,DIVISIONS,qrtr,hDiv);
+        cout<<"Division "<<hDiv<<" had the highest sales at $"<<hAmt<<endl;
+        cout<<endl<<endl;
+    }
 }//End Gaddis Chap6 Prob6
 
+float hghDiv(float a[][QRTRS],int n,int q, int &h){
+      float high=a[0][q];
+      for(int d=0;d<n;d++){
+          if(a[d][q]>high){
+              high=a[d][q];
+              h=d+1;
+          }
+      }
+      return high;
+}
 
+float divAvg(float a[][QRTRS],int n,int q){
+      float ttl=0,avg=0;
+      for(int d=0;d<n;d++){
+          ttl+=a[d][q];
+      }
+      avg=ttl/n;
+      return avg;
+}
+
+void ttlCmpr(float a[][QRTRS],int n,int q){
+     float pTtl=0;//total from previous quarter
+     float ttl=0;//current quarter total
+     for(int d=0;d<n;d++){
+         pTtl+=a[d][q-1];
+         ttl+=a[d][q];
+     }
+     cout<<"Company's change from last quarter: $"<<(ttl-pTtl)<<endl;
+}
+
+float qrtTtl(float a[][QRTRS],int n,int q){
+     float ttl=0;
+     for(int d=0;d<n;d++){
+         ttl+=a[d][q];
+     }
+     return ttl;
+}
+
+void qrtCmpr(float a[][QRTRS],int n,int q){
+     float dif1,dif2,dif3,dif4,dif5,dif6;
+     cout<<"Changes from last Quarter:"<<endl;
+     for(int d=0;d<n;d++){
+         cout<<"Division "<<d+1<<" change: $"<<(a[d][q]-a[d][q-1])<<endl;
+     }
+     cout<<endl;
+}
+
+void lstSls(float a[][QRTRS],int n,int q){
+     for(int d=0;d<n;d++){
+         cout<<"Division "<<d+1<<" sales: $"<<a[d][q]<<endl;
+     }
+     cout<<endl;
+}
+
+void getFigs(float a[][QRTRS],int n){
+     cout<<"Please enter the sales figures for all 6 divisions for each quarter."<<endl;
+     for(int i=0;i<n;i++){
+         for(int j=0;j<QRTRS;j++){
+             do{
+                 cout<<"Enter Q"<<(j+1)<<" sales for division "<<(i+1)<<": ";
+                 cin>>a[i][j];
+             }while(a[i][j]<0);
+         }
+     }
+     cout<<endl;
+}
 
 
 
