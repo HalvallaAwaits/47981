@@ -8,7 +8,6 @@
 #include <string>
 #include <fstream>
 #include <iomanip>
-#include <vector>
 using namespace std;
 
 //Global Constants
@@ -66,8 +65,8 @@ void Menu(){
     cout<<"Type 5 for Gaddis 7th Edition Chapter 7 problem 6"<<endl;
     cout<<"Type 6 for Gaddis 7th Edition Chapter 7 problem 7"<<endl;
     cout<<"Type 7 for Gaddis 7th Edition Chapter 8 problem 1"<<endl;
-    cout<<"Type 8 for Gaddis 7th Edition Chapter 7 problem 9"<<endl;
-    cout<<"Type 9 for Gaddis 7th Edition Chapter 7 problem 10"<<endl;
+    cout<<"Type 8 for Gaddis 7th Edition Chapter 8 problem 2"<<endl;
+    cout<<"Type 9 for Gaddis 7th Edition Chapter 8 problem 3"<<endl;
     cout<<"Type anything else to exit \n"<<endl;
 }
 
@@ -710,20 +709,86 @@ bool srch(int a[],int n,int v){
 //End Gaddis Chap8 Prob1  
     
     
-//Begin Gaddis Chap7 Prob9
+//Begin Gaddis Chap8 Prob2
 void prob8(){
-       
-}//End Gaddis Chap7 Prob9
+     //Function Prototypes
+     bool srch2(int [],int,int);
+     
+     //Declare Variables
+     const int SIZE=10;
+     int array[SIZE]={13579,26791,26792,33445,55555,
+                      62483,77777,79422,85647,93121};
+     int found;
+     int lttry;
+     
+     //get number to search from user
+     cout<<"Please enter this week's winning 5 digit number:"<<endl;
+     cin>>lttry;
+     
+     //search list for user input
+     found=srch(array,SIZE,lttry);
+     
+     //output results
+     if(found==1)cout<<"You've won the lottery! You win at life!"<<endl<<endl;
+     else cout<<"Sorry... better luck next week."<<endl<<endl;
+}
 
-
-
-
-
-//Begin Gaddis Chap7 Prob10
-void prob9(){
+bool srch2(int a[],int n,int v){
+    //Declare Variables
+    bool f=false;
     
-}//End Gaddis Chap7 Prob10
+    for(int i=0;i<n&&!f;i++){
+            if(a[i]==v){
+                f=true;
+                return f;
+            }
+    }
+    return f;
+}
+//End Gaddis Chap8 Prob2
 
+
+//Begin Gaddis Chap8 Prob3
+void prob9(){
+    //Function Prototypes
+     bool binSrch(int [],int,int);
+     
+     //Declare Variables
+     const int SIZE=10;
+     int array[SIZE]={13579,26791,26792,33445,55555,
+                      62483,77777,79422,85647,93121};
+     int found;
+     int lttry;
+     
+     //get number to search from user
+     cout<<"Please enter this week's winning 5 digit number:"<<endl;
+     cin>>lttry;
+     
+     //search list for user input
+     found=srch(array,SIZE,lttry);
+     
+     //output results
+     if(found==1)cout<<"You've won the lottery! You win at life!"<<endl<<endl;
+     else cout<<"Sorry... better luck next week."<<endl<<endl;
+}
+
+bool bnSrch(int a[],int n,int v){
+    //Declare Variables
+    bool fnd=false;
+    int f=0,l=n-1,m;
+    
+    while(!fnd&&f<=l){
+         m=(f+l)/2;
+         if(a[m]==v){
+             fnd=true;
+             return fnd;
+         }
+         else if(a[m]>v)l=m-1;
+         else f=m+1;
+    }
+    return fnd;
+}
+//End Gaddis Chap8 Prob13
 
 void dflt(short val){
         cout<<"You typed "<<val<<" to exit the program"<<endl;
