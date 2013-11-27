@@ -65,7 +65,7 @@ void Menu(){
     cout<<"Type 4 for Gaddis 7th Edition Chapter 7 problem 5"<<endl;
     cout<<"Type 5 for Gaddis 7th Edition Chapter 7 problem 6"<<endl;
     cout<<"Type 6 for Gaddis 7th Edition Chapter 7 problem 7"<<endl;
-    cout<<"Type 7 for Gaddis 7th Edition Chapter 7 problem 8"<<endl;
+    cout<<"Type 7 for Gaddis 7th Edition Chapter 8 problem 1"<<endl;
     cout<<"Type 8 for Gaddis 7th Edition Chapter 7 problem 9"<<endl;
     cout<<"Type 9 for Gaddis 7th Edition Chapter 7 problem 10"<<endl;
     cout<<"Type anything else to exit \n"<<endl;
@@ -669,13 +669,45 @@ void getFigs(float a[][QRTRS],int n){
 
 
     
-//Begin Gaddis Chap7 Prob8
+//Begin Gaddis Chap8 Prob1
 void prob7(){
-        
-}//End Gaddis Chap7 Prob8
+     //Function Prototypes
+     bool srch(int [],int,int);
+     
+     //Declare Variables
+     const int SIZE=18;
+     int array[SIZE]={5658845,4520125,7895122,8777541,8451277,1302850,
+                      8080152,4562555,5552012,5050552,7825877,1250255,
+                      1005231,6545231,3852085,7576651,7881200,4581002};
+     int found;
+     int val;
+     
+     //get number to search from user
+     cout<<"Please enter the 7 digit account number you are searching for:"<<endl;
+     cin>>val;
+     
+     //search list for user input
+     found=srch(array,SIZE,val);
+     
+     //output results
+     if(found==1)cout<<"This account number is valid."<<endl<<endl;
+     else cout<<"This account number is invalid!"<<endl<<endl;
+     
+}
 
+bool srch(int a[],int n,int v){
+    //Declare Variables
+    bool f=false;
     
-    
+    for(int i=0;i<n&&!f;i++){
+            if(a[i]==v){
+                f=true;
+                return f;
+            }
+    }
+    return f;
+}
+//End Gaddis Chap8 Prob1  
     
     
 //Begin Gaddis Chap7 Prob9
