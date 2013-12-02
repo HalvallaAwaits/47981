@@ -91,13 +91,13 @@ void prob0(){
      }
      cout<<endl;
      
-     //Check for largest value
+     //Find largest value
      value=array[0];
      for (int l=0;l<SIZE;l++)
          if (array[l]>value)value=array[l];
      cout<<"The largest value you entered in the array is: "<<value<<endl;
      
-     //Check for smallest value
+     //Find     smallest value
      value=array[0];
      for (int s=0;s<SIZE;s++)
          if (array[s]<value)value=array[s];
