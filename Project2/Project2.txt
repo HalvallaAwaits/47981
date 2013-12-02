@@ -1,6 +1,0 @@
-This is just a temporary placeholder for my Project 2 as I am debating between a couple of project ideas:
-
--Risk
--Text based adventure
--Text based kingdom builder
--Sorry
