@@ -11,17 +11,22 @@ using namespace std;
 //No Globals
 
 //Function Prototypes
-void gameBoard(char,char,char,char,char,char,char,char,char,char);//Draws the game board
+void gameBoard(char []);//Draws the game board
+char plyrTrn(int &);
+char gtSpc(int);
+//char mrkSpc();
+//int gmOvr();
 
 //Begin Execution Here
 int main(int argc, char *argv[])
 {
     //Declare Variables
-    char board[10]={'0','1','2','3','4','5','6','7','8','9'}; //Board spaces
-    short state=0; //Variable to track if game is over 0=no, 1=over, 2=draw;
+    const int SIZE=10;
+    char board[SIZE]={'0','1','2','3','4','5','6','7','8','9'}; //Board spaces
+    int state=0; //Variable to track if game is over 0=no, 1=over, 2=draw;
     char space; //Board Selection space
     char choice='y'; //Play again?
-    short player=1; //Determines which player's turn is happening
+    int player=1; //Determines which player's turn is happening
     char plyrMrk='X'; //Bases the X or O off player #
     
     //Introduce game
@@ -29,23 +34,16 @@ int main(int argc, char *argv[])
     cout<<"This game is meant for two players."<<endl;
     
     do{//Loop if you want to play again
-        do{//Play until victory or draw
+        //Loop until victory or draw
+        do{
             //Draw Board
-            gameBoard(board[0],board[1],board[2],board[3],board[4],board[5],board[6],board[7],board[8],board[9]);
+            gameBoard(board);
        
             //Determine which player's turn it is
-            if (player%2==1){
-                player=1;
-                plyrMrk='X';
-                }
-            else if (player%2==0){
-                player=2;
-                plyrMrk='O';
-                }
+            plyrMrk=plyrTrn(player);
        
             //Get Board Space selection from player
-            cout<<"Player "<<player<<" make your selection by typing the space number: ";
-            cin>>space;
+            space=gtSpc(player);
        
             //Mark Game Board with selection
             if (space=='1'&&board[1]=='1')
@@ -98,7 +96,7 @@ int main(int argc, char *argv[])
        
         }while(state==0);
         //Show Board one last time for end status
-        gameBoard(board[0],board[1],board[2],board[3],board[4],board[5],board[6],board[7],board[8],board[9]);
+        gameBoard(board);
     
         //Show end results of game, decrement to show last player was winner
         if (state==1)
@@ -121,23 +119,41 @@ int main(int argc, char *argv[])
         board[8]='8';
         board[9]='9';
         
-    }while (choice=='y'||choice=='Y');//run again if yes
+    }while (choice=='y'||choice=='Y');//runs again if yes
     
     system("PAUSE");
     return EXIT_SUCCESS;
 }
 
+char gtSpc(int p){
+     char sp;
+     cout<<"Player "<<p<<" make your selection by typing the space number: ";
+     cin>>sp;
+     return sp;
+}
+
+char plyrTrn(int &p){
+     if (p%2==1){
+         p=1;
+         return 'X';
+     }
+     else if (p%2==0){
+         p=2;
+         return 'O';
+     }
+}
+
 //This function draws the game board
-void gameBoard(char n0, char n1,char n2, char n3, char n4, char n5, char n6, char n7, char n8, char n9){
+void gameBoard(char a[]){
     cout<<"\nPlayer 1 is X's and Player 2 is O's."<<endl<<endl;
     cout<<"     ___ ___ ___ "<<endl;
     cout<<"    |   |   |   |"<<endl;
-    cout<<"    | "<<n7<<" | "<<n8<<" | "<<n9<<" |"<<endl;
+    cout<<"    | "<<a[7]<<" | "<<a[8]<<" | "<<a[9]<<" |"<<endl;
     cout<<"    |___|___|___|"<<endl;
     cout<<"    |   |   |   |"<<endl;
-    cout<<"    | "<<n4<<" | "<<n5<<" | "<<n6<<" |"<<endl;
+    cout<<"    | "<<a[4]<<" | "<<a[5]<<" | "<<a[6]<<" |"<<endl;
     cout<<"    |___|___|___|"<<endl;
     cout<<"    |   |   |   |"<<endl;
-    cout<<"    | "<<n1<<" | "<<n2<<" | "<<n3<<" |"<<endl;
+    cout<<"    | "<<a[1]<<" | "<<a[2]<<" | "<<a[3]<<" |"<<endl;
     cout<<"    |___|___|___|"<<endl<<endl;
 }
