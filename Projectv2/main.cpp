@@ -14,8 +14,9 @@ using namespace std;
 void gameBoard(char []);//Draws the game board
 char plyrTrn(int &);
 char gtSpc(int);
-//char mrkSpc();
-//int gmOvr();
+void mrkSpc(char [],char,char,int &);
+int gmOvr(char [],int &);
+//int kpScr();
 
 //Begin Execution Here
 int main(int argc, char *argv[])
@@ -23,9 +24,10 @@ int main(int argc, char *argv[])
     //Declare Variables
     const int SIZE=10;
     char board[SIZE]={'0','1','2','3','4','5','6','7','8','9'}; //Board spaces
-    int state=0; //Variable to track if game is over 0=no, 1=over, 2=draw;
+    //int state=0; //Variable to track if game is over 0=no, 1=over, 2=draw;
     char space; //Board Selection space
     char choice='y'; //Play again?
+    int state=0;
     int player=1; //Determines which player's turn is happening
     char plyrMrk='X'; //Bases the X or O off player #
     
@@ -33,7 +35,8 @@ int main(int argc, char *argv[])
     cout<<"Play Tic Tac Toe!"<<endl;
     cout<<"This game is meant for two players."<<endl;
     
-    do{//Loop if you want to play again
+    //Outer loop to determine if you want to play again
+    do{
         //Loop until victory or draw
         do{
             //Draw Board
@@ -46,53 +49,10 @@ int main(int argc, char *argv[])
             space=gtSpc(player);
        
             //Mark Game Board with selection
-            if (space=='1'&&board[1]=='1')
-                board[1]=plyrMrk;
-            else if (space=='2'&&board[2]=='2')
-                board[2]=plyrMrk;
-            else if (space=='3'&&board[3]=='3')
-                board[3]=plyrMrk;
-            else if (space=='4'&&board[4]=='4')
-                board[4]=plyrMrk;
-            else if (space=='5'&&board[5]=='5')
-                board[5]=plyrMrk;
-            else if (space=='6'&&board[6]=='6')
-                board[6]=plyrMrk;
-            else if (space=='7'&&board[7]=='7')
-                board[7]=plyrMrk;
-            else if (space=='8'&&board[8]=='8')
-                board[8]=plyrMrk;
-            else if (space=='9'&&board[9]=='9')
-                board[9]=plyrMrk;
-            else{
-                cout<<"Space already taken! Select a space without an X or O"<<endl;
-                player--;//decrement player so that it runs again for the same player
-            }
+            mrkSpc(board,space,plyrMrk,player);
         
             //Check to see if the game has ended with this selection
-            if (board[1]==board[2]&&board[2]==board[3])
-                state=1;//victory achieved
-            else if (board[4]==board[5]&&board[5]==board[6])
-                state=1;//victory achieved
-            else if (board[7]==board[8]&&board[8]==board[9])
-                state=1;//victory achieved
-            else if (board[1]==board[4]&&board[4]==board[7])
-                state=1;//victory achieved
-            else if (board[2]==board[5]&&board[5]==board[8])
-                state=1;//victory achieved
-            else if (board[3]==board[6]&&board[6]==board[9])
-                state=1;//victory achieved
-            else if (board[1]==board[5]&&board[5]==board[9])
-                state=1;//victory achieved
-            else if (board[3]==board[5]&&board[5]==board[7])
-                state=1;//victory achieved
-            else if (board[1]!='1'&&board[2]!='2'&&board[3]!='3'&&board[4]!='4'
-                &&board[5]!='5'&&board[6]!='6'&&board[7]!='7'&&board[8]!='8'&&board[9]!='9')
-                state=2;//game ends in draw
-            else
-                state=0;//board not yet filled, continue playing
-            //Increment player by 1 to give next player their turn
-            player++;
+            state=gmOvr(board,player);
        
         }while(state==0);
         //Show Board one last time for end status
@@ -123,6 +83,64 @@ int main(int argc, char *argv[])
     
     system("PAUSE");
     return EXIT_SUCCESS;
+}
+
+int gmOvr(char a[],int &p){
+    int s=0;
+    
+    //game ends in a win
+    if (a[1]==a[2]&&a[2]==a[3])
+         s=1;
+    else if (a[4]==a[5]&&a[5]==a[6])
+         s=1;
+    else if (a[7]==a[8]&&a[8]==a[9])
+         s=1;
+    else if (a[1]==a[4]&&a[4]==a[7])
+         s=1;
+    else if (a[2]==a[5]&&a[5]==a[8])
+         s=1;
+    else if (a[3]==a[6]&&a[6]==a[9])
+         s=1;
+    else if (a[1]==a[5]&&a[5]==a[9])
+         s=1;
+    else if (a[3]==a[5]&&a[5]==a[7])
+         s=1;
+    //game ends in draw
+    else if (a[1]!='1'&&a[2]!='2'&&a[3]!='3'&&a[4]!='4'
+         &&a[5]!='5'&&a[6]!='6'&&a[7]!='7'&&a[8]!='8'&&a[9]!='9')
+         s=2;
+    //game continues
+    else
+         s=0;
+    //Increment player by 1 to give next player their turn
+    p++;
+    
+    return s;
+}
+
+void mrkSpc(char a[],char sp,char mrk,int &p){
+     if (sp=='1'&&a[1]=='1')
+          a[1]=mrk;
+     else if (sp=='2'&&a[2]=='2')
+          a[2]=mrk;
+     else if (sp=='3'&&a[3]=='3')
+          a[3]=mrk;
+     else if (sp=='4'&&a[4]=='4')
+          a[4]=mrk;
+     else if (sp=='5'&&a[5]=='5')
+          a[5]=mrk;
+     else if (sp=='6'&&a[6]=='6')
+          a[6]=mrk;
+     else if (sp=='7'&&a[7]=='7')
+          a[7]=mrk;
+     else if (sp=='8'&&a[8]=='8')
+          a[8]=mrk;
+     else if (sp=='9'&&a[9]=='9')
+          a[9]=mrk;
+     else{
+          cout<<"Space already taken! Select a space without an X or O!"<<endl;
+          p--;//decrement player so that it runs again for the same player
+     }
 }
 
 char gtSpc(int p){
