@@ -7,23 +7,29 @@
 //Libraries
 #include <iostream>
 #include <string>
+#include <fstream>
+#include <ctime>
 using namespace std;
 
-//No Globals
+//Globals
+const int LOSSES=2;//to hold score in 2d array, will be output to file
 
 //Function Prototypes
-void gameBoard(char [],string,string);//Draws the game board
+string sttngs(int, string &);
+void gameBoard(char [],string,string,int);
 char plyrTrn(int &);
 char gtSpc(int, string, string);
 void mrkSpc(char [],char,char,int &);
-int gmOvr(char [],int &);
-//int kpScr();
+int gmOvr(char [],int &,string, string,int);
+void rslt(int,int,string,string,int [][LOSSES],int,int &);
+void rcrdScr(int [][LOSSES],int,string,string,int,int);
+
 
 //Begin Execution Here
 int main(int argc, char *argv[])
 {
     //Declare Variables
-    const int SIZE=10;
+    const int SIZE=10,WINS=2;
     char board[SIZE]={'0','1','2','3','4','5','6','7','8','9'}; //Board spaces
     //int state=0; //Variable to track if game is over 0=no, 1=over, 2=draw;
     char space; //Board Selection space
@@ -32,92 +38,199 @@ int main(int argc, char *argv[])
     int player=1; //Determines which player's turn is happening
     int numPlyr; //holds number of players
     int gmNum=1; //holds number of games played
+    int draws=0; //counts number of draws
+    int diff; //holds difficulty choice
     char plyrMrk='X'; //Bases the X or O off player #
     string p1Name; //holds player 1 name
-    string p2Name="Computer"; //holds player 2 name
+    string p2Name="AI"; //holds player 2 name
+    int score[WINS][LOSSES]={0,0,0,0}; //holds wins and losses for each player
+    srand(static_cast<unsigned int>(time(0)));
     
     //Introduce game
     cout<<"Welcome to Tic Tac Toe!"<<endl;
     cout<<"Now with AI!"<<endl<<endl;
-    
+        
     //prompt for number of players or AI opponent selection
     cout<<"Enter 1 for Easy AI opponent"<<endl;
     cout<<"Enter 2 for Hard AI opponent"<<endl;
-    cout<<"Enter 3 for 2 player mode"<<endl;
+    cout<<"Enter 3 for 2 players!"<<endl;
+    cin>>numPlyr;
     
-    do{
-       cin>>numPlyr;
-    }while(numPlyr<1||numPlyr>3);
-    if(numPlyr==1||numPlyr==2){
-        cout<<"Enter Player 1's name: ";
-        cin>>p1Name;
+    //read in player names from settings.txt
+    p1Name=sttngs(numPlyr,p2Name);
+    
+    switch(numPlyr){
+        case 1:
+             do{
+                do{
+                   //change AI name
+                   p2Name="Easy AI";
+                   
+                   //draw board
+                   gameBoard(board,p1Name,p2Name,gmNum);
+                   
+                   //determine which player's turn
+                   plyrMrk=plyrTrn(player);
+                   
+                   //get user's selection for space
+                   space=gtSpc(player,p1Name,p2Name);
+                   
+                   //mark the board with selection
+                   mrkSpc(board,space,plyrMrk,player);
+                   
+                   //check to see if game is over
+                   state=gmOvr(board,player,p1Name,p2Name,gmNum);
+                
+                }while(state==0);
+                
+                //display result of game end
+                rslt(state,player,p1Name,p2Name,score,WINS,draws);
+    
+                //Ask if user would like to play the game again
+                cout<<"Would you like to play again? (Y/N)"<<endl;
+                cin>>choice;
+        
+                //keeps track of how many games have been played
+                gmNum++;
+                
+             //runs again if yes    
+             }while (choice=='y'||choice=='Y');
+             break;
+        
+        case 2:
+             do{
+                do{
+                   //change AI name
+                   p2Name="Hard AI";
+                   
+                   //draw board
+                   gameBoard(board,p1Name,p2Name,gmNum);
+                   
+                   //determine which player's turn it is
+                   plyrMrk=plyrTrn(player);
+                   
+                   //get user's selection for space
+                   space=gtSpc(player,p1Name,p2Name);
+                   
+                   //mark the board with selection
+                   mrkSpc(board,space,plyrMrk,player);
+                   
+                   //check to see if game is over
+                   state=gmOvr(board,player,p1Name,p2Name,gmNum);
+                
+                }while(state==0);
+                
+                //display end result of game
+                rslt(state,player,p1Name,p2Name,score,WINS,draws);
+    
+                //Ask if user would like to play the game again
+                cout<<"Would you like to play again? (Y/N)"<<endl;
+                cin>>choice;
+        
+                //keeps track of how many games have been played
+                gmNum++;
+                
+             //runs again if yes    
+             }while (choice=='y'||choice=='Y');
+             break;
+        
+        case 3:
+             //Outer loop to determine if you want to play again
+             do{
+                //Loop until victory or draw
+                do{
+                   //Draw Board
+                   gameBoard(board,p1Name,p2Name,gmNum);
+       
+                   //Determine which player's turn it is
+                   plyrMrk=plyrTrn(player);
+       
+                   //Get Board Space selection from player
+                   space=gtSpc(player, p1Name, p2Name);
+            
+                   //Mark Game Board with selection
+                   mrkSpc(board,space,plyrMrk,player);
+        
+                   //Check to see if the game has ended with this selection
+                   state=gmOvr(board,player,p1Name,p2Name,gmNum);
+       
+                }while(state==0);
+    
+             //display game end results
+             rslt(state,player,p1Name,p2Name,score,WINS,draws);
+    
+             //Ask if user would like to play the game again
+             cout<<"Would you like to play again? (Y/N)"<<endl;
+             cin>>choice;
+        
+             //keeps track of how many games have been played
+             gmNum++;
+    
+             //runs again if yes    
+             }while (choice=='y'||choice=='Y');
+             break;     
     }
-    else{
-        cout<<"Enter Player 1's name: ";
-        cin>>p1Name;
-        cout<<"Enter Player 2's name: ";
-        cin>>p2Name;
-    }
     
-    //Outer loop to determine if you want to play again
-    do{
-        //Loop until victory or draw
-        do{
-            system("CLS");
-            cout<<"Game "<<gmNum<<endl;
-            //Draw Board
-            gameBoard(board,p1Name,p2Name);
-       
-            //Determine which player's turn it is
-            plyrMrk=plyrTrn(player);
-       
-            //Get Board Space selection from player
-            space=gtSpc(player, p1Name, p2Name);
-       
-            //Mark Game Board with selection
-            mrkSpc(board,space,plyrMrk,player);
-        
-            //Check to see if the game has ended with this selection
-            state=gmOvr(board,player);
-       
-        }while(state==0);
-        
-        //Show Board one last time for end status
-        gameBoard(board,p1Name,p2Name);
-    
-        //Show end results of game, decrement to show last player was winner
-        if (state==1)
-            cout<<"Player "<<--player<<" is the winner! Good job!"<<endl;
-        if (state==2)
-            cout<<"The game has ended in a draw!"<<endl;
-    
-        //Ask if user would like to play the game again
-        cout<<"Would you like to play again? (Y/N)"<<endl;
-        cin>>choice;
-        
-        //Reset values of the board
-        board[1]='1';
-        board[2]='2';
-        board[3]='3';
-        board[4]='4';
-        board[5]='5';
-        board[6]='6';
-        board[7]='7';
-        board[8]='8';
-        board[9]='9';
-        
-        //keeps track of how many subsequent games have been played
-        gmNum++;
-    
-    //runs again if yes    
-    }while (choice=='y'||choice=='Y');
+    //records the score by outputting to file
+    rcrdScr(score,WINS,p1Name,p2Name,gmNum,draws);
         
     system("PAUSE");
     return EXIT_SUCCESS;
 }//End of Main
 
+//outputs final overall stats and stores them in a file
+//designated by the user
+void rcrdScr(int s[][LOSSES],int,string p1,string p2,int g,int d){
+     string rsltFl;
+     
+     //output results to screen
+     cout<<endl;
+     cout<<"Please specify a filename that you would"<<endl
+         <<"like to output the results to: ";
+     cin>>rsltFl;
+     
+     //declare the outfile and open
+     ofstream outputFile;
+     outputFile.open(rsltFl.c_str());
+     
+     cout<<endl<<"You can find the file "<<rsltFl<<" within"<<endl
+         <<"the program folder."<<endl<<endl;   
+     cout<<"Games Played = "<<(g-1)<<" Draws = "<<d<<endl;
+     cout<<p1<<"'s score: "<<endl<<s[0][0]<<"W "<<s[0][1]<<"L"<<endl;
+     cout<<p2<<"'s score: "<<endl<<s[1][0]<<"W "<<s[1][1]<<"L"<<endl;
+     
+     //output results to file
+     outputFile<<"Games Played = "<<(g-1)<<" Draws = "<<d<<endl;
+     outputFile<<p1<<"'s score: "<<endl<<s[0][0]<<"W "<<s[0][1]<<"L"<<endl;
+     outputFile<<p2<<"'s score: "<<endl<<s[1][0]<<"W "<<s[1][1]<<"L"<<endl;
+     
+     //close file
+     outputFile.close();
+}
+
+//outputs winning game results
+void rslt(int s,int p,string p1,string p2,int scr[][LOSSES],int w, int &d){
+     //Show end results of game
+             if (s==1){
+                if((p)%2==1){
+                    cout<<p1<<" is the winner! Good job!"<<endl;
+                    scr[0][0]++;
+                    scr[1][1]++;
+                }
+                if((p)%2==0){
+                    cout<<p2<<" is the winner! Good job!"<<endl;
+                    scr[1][0]++;
+                    scr[0][1]++;
+                }
+             }
+             if (s==2){
+                 cout<<"The game has ended in a draw!"<<endl;
+                 d++;
+             }
+}
+
 //determines if the  game is over
-int gmOvr(char a[],int &p){
+int gmOvr(char a[],int &p,string p1, string p2,int g){
     int s=0;
     
     //game ends in a win
@@ -137,15 +250,34 @@ int gmOvr(char a[],int &p){
          s=1;
     else if (a[3]==a[5]&&a[5]==a[7])
          s=1;
+    
+    if(s==1){
+         //draws board to show final move
+         gameBoard(a,p1,p2,g);
+         
+         //Reset values of the board
+         a[1]='1';
+         a[2]='2';
+         a[3]='3';
+         a[4]='4';
+         a[5]='5';
+         a[6]='6';
+         a[7]='7';
+         a[8]='8';
+         a[9]='9';
+    }
+    
     //game ends in draw
     else if (a[1]!='1'&&a[2]!='2'&&a[3]!='3'&&a[4]!='4'
          &&a[5]!='5'&&a[6]!='6'&&a[7]!='7'&&a[8]!='8'&&a[9]!='9')
          s=2;
     //game continues
-    else
+    else{
          s=0;
+         p++;
+    }
     //Increment player by 1 to give next player their turn
-    p++;
+    //p++;
     
     return s;
 }
@@ -171,10 +303,9 @@ void mrkSpc(char a[],char sp,char mrk,int &p){
      else if (sp=='9'&&a[9]=='9')
           a[9]=mrk;
      else{
-          cout<<"Space already taken! Select a space without an X or O!"<<endl;
           p--;//decrement player so that it runs again for the same player
      }
-     system("CLS");
+     //system("CLS");
 }
 
 //get player's selection for space
@@ -184,8 +315,9 @@ char gtSpc(int p, string p1, string p2){
      do{
         if(p==1)
             cout<<p1<<", make your selection by typing the space number: ";
-        else
+        else{
             cout<<p2<<", make your selection by typing the space number: ";
+            }
         //reads in a string
         cin>>space;
         //truncates the string and takes only the first character in the string
@@ -211,7 +343,9 @@ char plyrTrn(int &p){
 }
 
 //draws the game board
-void gameBoard(char a[],string p1, string p2){
+void gameBoard(char a[],string p1, string p2,int g){
+    system("CLS");
+    cout<<"Game "<<g<<endl;
     cout<<"\n"<<p1<<" is X's and "<<p2<<" is O's."<<endl<<endl;
     cout<<"     ___ ___ ___ "<<endl;
     cout<<"    |   |   |   |"<<endl;
@@ -223,4 +357,22 @@ void gameBoard(char a[],string p1, string p2){
     cout<<"    |   |   |   |"<<endl;
     cout<<"    | "<<a[1]<<" | "<<a[2]<<" | "<<a[3]<<" |"<<endl;
     cout<<"    |___|___|___|"<<endl<<endl;
+}
+
+string sttngs(int numP, string &p2){  
+    string p1;//hold player 1 name
+    
+    //declare inputfile and open it
+    ifstream inputFile;
+    inputFile.open("settings.txt");
+    
+    //read in player names
+    inputFile>>p1;
+    if(numP==3)
+        inputFile>>p2;
+        
+    //close inputfile
+    inputFile.close();
+    
+    return p1;
 }
