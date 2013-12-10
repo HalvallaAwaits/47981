@@ -12,13 +12,14 @@
 using namespace std;
 
 //Globals
-const int LOSSES=2;//to hold score in 2d array, will be output to file
+const int LOSSES=2;//to hold losses in 2d array
 
 //Function Prototypes
 string sttngs(int, string &);
 void gameBoard(char [],string,string,int);
 char plyrTrn(int &);
-char gtSpc(int, string, string);
+char gtSpc(char [],int, string, string, int);
+int advAI(char []);
 void mrkSpc(char [],char,char,int &);
 int gmOvr(char [],int &,string, string,int);
 void rslt(int,int,string,string,int [][LOSSES],int,int &);
@@ -39,7 +40,6 @@ int main(int argc, char *argv[])
     int numPlyr; //holds number of players
     int gmNum=1; //holds number of games played
     int draws=0; //counts number of draws
-    int diff; //holds difficulty choice
     char plyrMrk='X'; //Bases the X or O off player #
     string p1Name; //holds player 1 name
     string p2Name="AI"; //holds player 2 name
@@ -52,124 +52,57 @@ int main(int argc, char *argv[])
         
     //prompt for number of players or AI opponent selection
     cout<<"Enter 1 for Easy AI opponent"<<endl;
-    cout<<"Enter 2 for Hard AI opponent"<<endl;
+    cout<<"Enter 2 for Advanced AI opponent"<<endl;
     cout<<"Enter 3 for 2 players!"<<endl;
     cin>>numPlyr;
     
     //read in player names from settings.txt
     p1Name=sttngs(numPlyr,p2Name);
-    
-    switch(numPlyr){
-        case 1:
-             do{
-                do{
-                   //change AI name
-                   p2Name="Easy AI";
-                   
-                   //draw board
-                   gameBoard(board,p1Name,p2Name,gmNum);
-                   
-                   //determine which player's turn
-                   plyrMrk=plyrTrn(player);
-                   
-                   //get user's selection for space
-                   space=gtSpc(player,p1Name,p2Name);
-                   
-                   //mark the board with selection
-                   mrkSpc(board,space,plyrMrk,player);
-                   
-                   //check to see if game is over
-                   state=gmOvr(board,player,p1Name,p2Name,gmNum);
-                
-                }while(state==0);
-                
-                //display result of game end
-                rslt(state,player,p1Name,p2Name,score,WINS,draws);
-    
-                //Ask if user would like to play the game again
-                cout<<"Would you like to play again? (Y/N)"<<endl;
-                cin>>choice;
-        
-                //keeps track of how many games have been played
-                gmNum++;
-                
-             //runs again if yes    
-             }while (choice=='y'||choice=='Y');
-             break;
-        
-        case 2:
-             do{
-                do{
-                   //change AI name
-                   p2Name="Hard AI";
-                   
-                   //draw board
-                   gameBoard(board,p1Name,p2Name,gmNum);
-                   
-                   //determine which player's turn it is
-                   plyrMrk=plyrTrn(player);
-                   
-                   //get user's selection for space
-                   space=gtSpc(player,p1Name,p2Name);
-                   
-                   //mark the board with selection
-                   mrkSpc(board,space,plyrMrk,player);
-                   
-                   //check to see if game is over
-                   state=gmOvr(board,player,p1Name,p2Name,gmNum);
-                
-                }while(state==0);
-                
-                //display end result of game
-                rslt(state,player,p1Name,p2Name,score,WINS,draws);
-    
-                //Ask if user would like to play the game again
-                cout<<"Would you like to play again? (Y/N)"<<endl;
-                cin>>choice;
-        
-                //keeps track of how many games have been played
-                gmNum++;
-                
-             //runs again if yes    
-             }while (choice=='y'||choice=='Y');
-             break;
-        
-        case 3:
-             //Outer loop to determine if you want to play again
-             do{
-                //Loop until victory or draw
-                do{
-                   //Draw Board
-                   gameBoard(board,p1Name,p2Name,gmNum);
+
+    //play while user selects yes
+    do{
+       //switch first player's turn each game
+       if(gmNum%2==1)
+           player=1;//player 1 gets first turn if odd # game
+       else
+           player=2;//player 2 gets first turn if even # game
+       state=0;//resets status of game to "not over"
+       for (int i=0;i<SIZE;i++)board[i]='0'+i;//resets game board values
        
-                   //Determine which player's turn it is
-                   plyrMrk=plyrTrn(player);
+       //continue running until there is a winner
+       do{
+          //change AI name if playing
+          if(numPlyr==1)p2Name="Easy AI";
+          if(numPlyr==2)p2Name="Advanced AI";
+           
+          //draw board
+          gameBoard(board,p1Name,p2Name,gmNum);
+           
+          //determine which player's turn
+          plyrMrk=plyrTrn(player);
+           
+          //get user's selection for space
+          space=gtSpc(board,player,p1Name,p2Name, numPlyr);
+           
+          //mark the board with selection
+          mrkSpc(board,space,plyrMrk,player);
+           
+          //check to see if game is over
+          state=gmOvr(board,player,p1Name,p2Name,gmNum);
        
-                   //Get Board Space selection from player
-                   space=gtSpc(player, p1Name, p2Name);
-            
-                   //Mark Game Board with selection
-                   mrkSpc(board,space,plyrMrk,player);
+       }while(state==0);
         
-                   //Check to see if the game has ended with this selection
-                   state=gmOvr(board,player,p1Name,p2Name,gmNum);
-       
-                }while(state==0);
+       //display result of game end
+       gameBoard(board,p1Name,p2Name,gmNum);
+       rslt(state,player,p1Name,p2Name,score,WINS,draws);
+
+       //Ask if user would like to play the game again
+       cout<<"Would you like to play again? (Y/N)"<<endl;
+       cin>>choice;
     
-             //display game end results
-             rslt(state,player,p1Name,p2Name,score,WINS,draws);
-    
-             //Ask if user would like to play the game again
-             cout<<"Would you like to play again? (Y/N)"<<endl;
-             cin>>choice;
-        
-             //keeps track of how many games have been played
-             gmNum++;
-    
-             //runs again if yes    
-             }while (choice=='y'||choice=='Y');
-             break;     
-    }
+    gmNum++;//adds to game# each time played    
+    //runs again if yes    
+    }while (choice=='y'||choice=='Y');
     
     //records the score by outputting to file
     rcrdScr(score,WINS,p1Name,p2Name,gmNum,draws);
@@ -251,21 +184,7 @@ int gmOvr(char a[],int &p,string p1, string p2,int g){
     else if (a[3]==a[5]&&a[5]==a[7])
          s=1;
     
-    if(s==1){
-         //draws board to show final move
-         gameBoard(a,p1,p2,g);
-         
-         //Reset values of the board
-         a[1]='1';
-         a[2]='2';
-         a[3]='3';
-         a[4]='4';
-         a[5]='5';
-         a[6]='6';
-         a[7]='7';
-         a[8]='8';
-         a[9]='9';
-    }
+    
     
     //game ends in draw
     else if (a[1]!='1'&&a[2]!='2'&&a[3]!='3'&&a[4]!='4'
@@ -275,10 +194,7 @@ int gmOvr(char a[],int &p,string p1, string p2,int g){
     else{
          s=0;
          p++;
-    }
-    //Increment player by 1 to give next player their turn
-    //p++;
-    
+    }    
     return s;
 }
 
@@ -305,23 +221,78 @@ void mrkSpc(char a[],char sp,char mrk,int &p){
      else{
           p--;//decrement player so that it runs again for the same player
      }
-     //system("CLS");
+}
+
+//Advanced AI board selection
+int advAI(char a[]){
+     if(a[1]=='X'&&a[2]=='X'&&a[3]=='3')return 3;
+     if(a[1]=='X'&&a[3]=='X'&&a[2]=='2')return 2;
+     if(a[2]=='X'&&a[3]=='X'&&a[1]=='1')return 1;
+     
+     if(a[4]=='X'&&a[5]=='X'&&a[6]=='6')return 6;
+     if(a[4]=='X'&&a[6]=='X'&&a[5]=='5')return 5;
+     if(a[5]=='X'&&a[6]=='X'&&a[4]=='4')return 4;
+     
+     if(a[7]=='X'&&a[8]=='X'&&a[9]=='9')return 9;
+     if(a[7]=='X'&&a[9]=='X'&&a[8]=='8')return 8;
+     if(a[8]=='X'&&a[9]=='X'&&a[7]=='7')return 7;
+     
+     if(a[1]=='X'&&a[4]=='X'&&a[7]=='7')return 7;
+     if(a[1]=='X'&&a[7]=='X'&&a[4]=='4')return 4;
+     if(a[4]=='X'&&a[7]=='X'&&a[1]=='1')return 1;
+     
+     if(a[2]=='X'&&a[5]=='X'&&a[8]=='8')return 8;
+     if(a[2]=='X'&&a[8]=='X'&&a[5]=='5')return 5;
+     if(a[5]=='X'&&a[8]=='X'&&a[2]=='2')return 2;
+     
+     if(a[3]=='X'&&a[6]=='X'&&a[9]=='9')return 9;
+     if(a[3]=='X'&&a[9]=='X'&&a[6]=='6')return 6;
+     if(a[6]=='X'&&a[9]=='X'&&a[3]=='3')return 3;
+     
+     if(a[1]=='X'&&a[5]=='X'&&a[9]=='9')return 9;
+     if(a[1]=='X'&&a[9]=='X'&&a[5]=='5')return 5;
+     if(a[5]=='X'&&a[9]=='X'&&a[1]=='1')return 1;
+     
+     if(a[3]=='X'&&a[5]=='X'&&a[7]=='7')return 7;
+     if(a[3]=='X'&&a[7]=='X'&&a[5]=='5')return 5;
+     if(a[5]=='X'&&a[7]=='X'&&a[3]=='3')return 3;
+     
+     int aisp=rand()%9+1;
+     return aisp;
 }
 
 //get player's selection for space
-char gtSpc(int p, string p1, string p2){
+char gtSpc(char a[],int p, string p1, string p2,int numP){
      string space;//holds space typed by player
      char sp;//holds actual char value of first digit in string
+     int aisp;//holds random# generated for easy ai selection
      do{
-        if(p==1)
+        //select space if player 1's turn
+        if(p==1){
             cout<<p1<<", make your selection by typing the space number: ";
+            cin>>space;
+            //truncates the string and takes only the first character in the string
+            sp=space[0];
+        }
+        //select space for player 2's turn
         else{
-            cout<<p2<<", make your selection by typing the space number: ";
+            //if player 2 is Easy AI
+            if(numP==1){
+                aisp=rand()%9+1;
+                sp='0'+aisp;
             }
-        //reads in a string
-        cin>>space;
-        //truncates the string and takes only the first character in the string
-        sp=space[0];
+            //if player 2 is Advanced AI
+            if(numP==2){
+                sp='0'+advAI(a);
+            }
+            //if player 2 is a second user
+            if(numP==3){
+                cout<<p2<<", make your selection by typing the space number: ";
+                cin>>space;
+                //truncates the string and takes only the first character in the string
+                sp=space[0];
+            }
+        }
         if(sp!='1'&&sp!='2'&&sp!='3'&&sp!='4'&&
            sp!='5'&&sp!='6'&&sp!='7'&&sp!='8'&&sp!='9')
             cout<<"Invalid selection!"<<endl;
