@@ -22,7 +22,7 @@ char gtSpc(char [],int, string, string, int);
 int advAI(char []);
 void mrkSpc(char [],char,char,int &);
 int gmOvr(char [],int &,string, string,int);
-void rslt(int,int,string,string,int [][LOSSES],int,int &);
+void rslt(int,int,string,string,int [][LOSSES],int &);
 void rcrdScr(int [][LOSSES],int,string,string,int,int);
 
 
@@ -32,10 +32,9 @@ int main(int argc, char *argv[])
     //Declare Variables
     const int SIZE=10,WINS=2;
     char board[SIZE]={'0','1','2','3','4','5','6','7','8','9'}; //Board spaces
-    //int state=0; //Variable to track if game is over 0=no, 1=over, 2=draw;
     char space; //Board Selection space
     char choice='y'; //Play again?
-    int state=0;
+    int state=0;//determines if game is over
     int player=1; //Determines which player's turn is happening
     int numPlyr; //holds number of players
     int gmNum=1; //holds number of games played
@@ -44,36 +43,59 @@ int main(int argc, char *argv[])
     string p1Name; //holds player 1 name
     string p2Name="AI"; //holds player 2 name
     int score[WINS][LOSSES]={0,0,0,0}; //holds wins and losses for each player
-    srand(static_cast<unsigned int>(time(0)));
+    srand(static_cast<unsigned int>(time(0)));//seed random number generator
     
-    //Introduce game
-    cout<<"Welcome to Tic Tac Toe!"<<endl;
-    cout<<"Now with AI!"<<endl<<endl;
+    do{
+        system("CLS");
+        //Introduce game
+        cout<<"***********************************************************************"<<endl;
+        cout<<"* ______ ______ ______   ______    _    ______   ______ ______ ______ *"<<endl;
+        cout<<"*   __     __   __         __     _ _   __         __   __  __ __     *"<<endl;
+        cout<<"*   __     __   __         __    _____  __         __   __  __ ____   *"<<endl;
+        cout<<"*   __     __   __         __   __   __ __         __   __  __ __     *"<<endl;
+        cout<<"*   __   ______ ______     __   __   __ ______     __   ______ ______ *"<<endl;
+        cout<<"*                                                                     *"<<endl;
+        cout<<"***********************************************************************"<<endl;
+        cout<<"                             Now with AI!!"<<endl<<endl;
+        cout<<endl<<endl;
         
-    //prompt for number of players or AI opponent selection
-    cout<<"Enter 1 for Easy AI opponent"<<endl;
-    cout<<"Enter 2 for Advanced AI opponent"<<endl;
-    cout<<"Enter 3 for 2 players!"<<endl;
-    cin>>numPlyr;
+        //inform user about sttngs file so they may update their name
+        cout<<"***NOTE***"<<endl;
+        cout<<"To edit player names, open up 'settings.txt' found within"
+            <<"\nthis program's folder and replace the two that are there!"<<endl<<endl<<endl;
+        
+        //prompt for number of players or AI opponent selection
+    
+        cout<<"Enter 1 for Easy AI opponent"<<endl;
+        cout<<"Enter 2 for Advanced AI opponent"<<endl;
+        cout<<"Enter 3 for 2 players!"<<endl;
+        cin>>numPlyr;
+    }while(numPlyr<1||numPlyr>3);//check proper input for selection
     
     //read in player names from settings.txt
     p1Name=sttngs(numPlyr,p2Name);
 
     //play while user selects yes
     do{
-       //switch first player's turn each game
+       //alternate first player's turn each game
        if(gmNum%2==1)
            player=1;//player 1 gets first turn if odd # game
        else
            player=2;//player 2 gets first turn if even # game
        state=0;//resets status of game to "not over"
-       for (int i=0;i<SIZE;i++)board[i]='0'+i;//resets game board values
+       
+       //reset game board values
+       for (int i=0;i<SIZE;i++)
+           board[i]='0'+i;
        
        //continue running until there is a winner
        do{
           //change AI name if playing
           if(numPlyr==1)p2Name="Easy AI";
           if(numPlyr==2)p2Name="Advanced AI";
+          //Default name to Bob if only 1 name
+          //in file but two player mode selected
+          if(numPlyr==3&&p2Name=="AI")p2Name="Bob";
            
           //draw board
           gameBoard(board,p1Name,p2Name,gmNum);
@@ -94,7 +116,7 @@ int main(int argc, char *argv[])
         
        //display result of game end
        gameBoard(board,p1Name,p2Name,gmNum);
-       rslt(state,player,p1Name,p2Name,score,WINS,draws);
+       rslt(state,player,p1Name,p2Name,score,draws);
 
        //Ask if user would like to play the game again
        cout<<"Would you like to play again? (Y/N)"<<endl;
@@ -111,21 +133,21 @@ int main(int argc, char *argv[])
     return EXIT_SUCCESS;
 }//End of Main
 
-//outputs final overall stats and stores them in a file
-//designated by the user
+//outputs final overall stats and stores them in a file designated by the user
 void rcrdScr(int s[][LOSSES],int,string p1,string p2,int g,int d){
      string rsltFl;
      
-     //output results to screen
+     //get file name for output file
      cout<<endl;
-     cout<<"Please specify a filename that you would"<<endl
-         <<"like to output the results to: ";
+     cout<<"Please specify a filename that you would like"<<endl
+         <<"to output the results to (ex:'results.txt'): ";
      cin>>rsltFl;
      
      //declare the outfile and open
      ofstream outputFile;
      outputFile.open(rsltFl.c_str());
      
+     //final results output to screen
      cout<<endl<<"You can find the file "<<rsltFl<<" within"<<endl
          <<"the program folder."<<endl<<endl;   
      cout<<"Games Played = "<<(g-1)<<" Draws = "<<d<<endl;
@@ -142,24 +164,24 @@ void rcrdScr(int s[][LOSSES],int,string p1,string p2,int g,int d){
 }
 
 //outputs winning game results
-void rslt(int s,int p,string p1,string p2,int scr[][LOSSES],int w, int &d){
+void rslt(int s,int p,string p1,string p2,int scr[][LOSSES],int &d){
      //Show end results of game
-             if (s==1){
-                if((p)%2==1){
-                    cout<<p1<<" is the winner! Good job!"<<endl;
-                    scr[0][0]++;
-                    scr[1][1]++;
-                }
-                if((p)%2==0){
-                    cout<<p2<<" is the winner! Good job!"<<endl;
-                    scr[1][0]++;
-                    scr[0][1]++;
-                }
-             }
-             if (s==2){
-                 cout<<"The game has ended in a draw!"<<endl;
-                 d++;
-             }
+     if (s==1){
+        if(p%2==1){
+            cout<<p1<<" is the winner! Good job!"<<endl;
+            scr[0][0]++;
+            scr[1][1]++;
+        }
+        if(p%2==0){
+            cout<<p2<<" is the winner! Good job!"<<endl;
+            scr[1][0]++;
+            scr[0][1]++;
+        }
+     }
+     if (s==2){
+         cout<<"The game has ended in a draw!"<<endl;
+         d++;
+     }
 }
 
 //determines if the  game is over
@@ -183,9 +205,6 @@ int gmOvr(char a[],int &p,string p1, string p2,int g){
          s=1;
     else if (a[3]==a[5]&&a[5]==a[7])
          s=1;
-    
-    
-    
     //game ends in draw
     else if (a[1]!='1'&&a[2]!='2'&&a[3]!='3'&&a[4]!='4'
          &&a[5]!='5'&&a[6]!='6'&&a[7]!='7'&&a[8]!='8'&&a[9]!='9')
@@ -225,6 +244,7 @@ void mrkSpc(char a[],char sp,char mrk,int &p){
 
 //Advanced AI board selection
 int advAI(char a[]){
+     //Checks for 2 horizontal spots held by player and chooses remaining
      if(a[1]=='X'&&a[2]=='X'&&a[3]=='3')return 3;
      if(a[1]=='X'&&a[3]=='X'&&a[2]=='2')return 2;
      if(a[2]=='X'&&a[3]=='X'&&a[1]=='1')return 1;
@@ -237,6 +257,7 @@ int advAI(char a[]){
      if(a[7]=='X'&&a[9]=='X'&&a[8]=='8')return 8;
      if(a[8]=='X'&&a[9]=='X'&&a[7]=='7')return 7;
      
+     //Checks for 2 vertical spots held by player and chooses remaining
      if(a[1]=='X'&&a[4]=='X'&&a[7]=='7')return 7;
      if(a[1]=='X'&&a[7]=='X'&&a[4]=='4')return 4;
      if(a[4]=='X'&&a[7]=='X'&&a[1]=='1')return 1;
@@ -249,6 +270,7 @@ int advAI(char a[]){
      if(a[3]=='X'&&a[9]=='X'&&a[6]=='6')return 6;
      if(a[6]=='X'&&a[9]=='X'&&a[3]=='3')return 3;
      
+     //Checks for 2 dagonal spots held by player and chooses remaining
      if(a[1]=='X'&&a[5]=='X'&&a[9]=='9')return 9;
      if(a[1]=='X'&&a[9]=='X'&&a[5]=='5')return 5;
      if(a[5]=='X'&&a[9]=='X'&&a[1]=='1')return 1;
@@ -257,6 +279,7 @@ int advAI(char a[]){
      if(a[3]=='X'&&a[7]=='X'&&a[5]=='5')return 5;
      if(a[5]=='X'&&a[7]=='X'&&a[3]=='3')return 3;
      
+     //if none of the above, select random available
      int aisp=rand()%9+1;
      return aisp;
 }
