@@ -15,7 +15,7 @@ using namespace std;
 const int LOSSES=2;//to hold losses in 2d array
 
 //Function Prototypes
-string sttngs(int, string &);
+string sttngs(int,string &,string p1="Derp");
 void gameBoard(char [],string,string,int);
 char plyrTrn(int &);
 char gtSpc(char [],int, string, string, int);
@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     int draws=0; //counts number of draws
     char plyrMrk='X'; //Bases the X or O off player #
     string p1Name; //holds player 1 name
-    string p2Name="AI"; //holds player 2 name
+    string p2Name="Bob"; //holds player 2 name
     int score[WINS][LOSSES]={0,0,0,0}; //holds wins and losses for each player
     srand(static_cast<unsigned int>(time(0)));//seed random number generator
     
@@ -65,7 +65,6 @@ int main(int argc, char *argv[])
             <<"\nthis program's folder and replace the two that are there!"<<endl<<endl<<endl;
         
         //prompt for number of players or AI opponent selection
-    
         cout<<"Enter 1 for Easy AI opponent"<<endl;
         cout<<"Enter 2 for Advanced AI opponent"<<endl;
         cout<<"Enter 3 for 2 players!"<<endl;
@@ -73,7 +72,7 @@ int main(int argc, char *argv[])
     }while(numPlyr<1||numPlyr>3);//check proper input for selection
     
     //read in player names from settings.txt
-    p1Name=sttngs(numPlyr,p2Name);
+    p1Name=sttngs(numPlyr, p2Name);
 
     //play while user selects yes
     do{
@@ -93,9 +92,6 @@ int main(int argc, char *argv[])
           //change AI name if playing
           if(numPlyr==1)p2Name="Easy AI";
           if(numPlyr==2)p2Name="Advanced AI";
-          //Default name to Bob if only 1 name
-          //in file but two player mode selected
-          if(numPlyr==3&&p2Name=="AI")p2Name="Bob";
            
           //draw board
           gameBoard(board,p1Name,p2Name,gmNum);
@@ -244,6 +240,41 @@ void mrkSpc(char a[],char sp,char mrk,int &p){
 
 //Advanced AI board selection
 int advAI(char a[]){
+     //Checks for 2 horizontal and chooses remaining to win
+     if(a[1]=='O'&&a[2]=='O'&&a[3]=='3')return 3;
+     if(a[1]=='O'&&a[3]=='O'&&a[2]=='2')return 2;
+     if(a[2]=='O'&&a[3]=='O'&&a[1]=='1')return 1;
+     
+     if(a[4]=='O'&&a[5]=='O'&&a[6]=='6')return 6;
+     if(a[4]=='O'&&a[6]=='O'&&a[5]=='5')return 5;
+     if(a[5]=='O'&&a[6]=='O'&&a[4]=='4')return 4;
+     
+     if(a[7]=='O'&&a[8]=='O'&&a[9]=='9')return 9;
+     if(a[7]=='O'&&a[9]=='O'&&a[8]=='8')return 8;
+     if(a[8]=='O'&&a[9]=='O'&&a[7]=='7')return 7;
+     
+     //Checks for 2 vertical and chooses remaining to win
+     if(a[1]=='O'&&a[4]=='O'&&a[7]=='7')return 7;
+     if(a[1]=='O'&&a[7]=='O'&&a[4]=='4')return 4;
+     if(a[4]=='O'&&a[7]=='O'&&a[1]=='1')return 1;
+     
+     if(a[2]=='O'&&a[5]=='O'&&a[8]=='8')return 8;
+     if(a[2]=='O'&&a[8]=='O'&&a[5]=='5')return 5;
+     if(a[5]=='O'&&a[8]=='O'&&a[2]=='2')return 2;
+     
+     if(a[3]=='O'&&a[6]=='O'&&a[9]=='9')return 9;
+     if(a[3]=='O'&&a[9]=='O'&&a[6]=='6')return 6;
+     if(a[6]=='O'&&a[9]=='O'&&a[3]=='3')return 3;
+     
+     //Checks for 2 diagonal to win
+     if(a[1]=='O'&&a[5]=='O'&&a[9]=='9')return 9;
+     if(a[1]=='O'&&a[9]=='O'&&a[5]=='5')return 5;
+     if(a[5]=='O'&&a[9]=='O'&&a[1]=='1')return 1;
+     
+     if(a[3]=='O'&&a[5]=='O'&&a[7]=='7')return 7;
+     if(a[3]=='O'&&a[7]=='O'&&a[5]=='5')return 5;
+     if(a[5]=='O'&&a[7]=='O'&&a[3]=='3')return 3;
+     
      //Checks for 2 horizontal spots held by player and chooses remaining
      if(a[1]=='X'&&a[2]=='X'&&a[3]=='3')return 3;
      if(a[1]=='X'&&a[3]=='X'&&a[2]=='2')return 2;
@@ -353,9 +384,8 @@ void gameBoard(char a[],string p1, string p2,int g){
     cout<<"    |___|___|___|"<<endl<<endl;
 }
 
-string sttngs(int numP, string &p2){  
-    string p1;//hold player 1 name
-    
+string sttngs(int numP,string &p2,string p1){  
+    //string p1;//hold player 1 name
     //declare inputfile and open it
     ifstream inputFile;
     inputFile.open("settings.txt");
