@@ -1,4 +1,5 @@
-/*  Joseph Reimbold
+/*  
+    Joseph Reimbold
     December 11, 2013
     Final
  */
@@ -9,6 +10,7 @@
 #include <fstream>
 #include <iomanip>
 #include <ctime>
+#include <vector>
 using namespace std;
 
 //Global Constants
@@ -125,33 +127,7 @@ short rvNm(unsigned short n){
 }
 
 //Begin Problem 2
-void prob2(){
-    /*
-    Problem 2
-    Write a program that plays the game "Guess the
-    Number" as follows.  Your program chooses the
-    number to be guessed by selecting an integer
-    at random in the range 1 to 500.  The program
-    displays
-    
-    
-    I have a number between 1 and 500
-    Can you guess my number?  You will be
-    given a maximum of 9 guesses.
-    Please type your first guess.
-    
-    
-    The player then types a guess.  The
-    program responds with one of the following.
-    
-    
-    1. Congratulations, You guessed the number!
-       Would you like to play again(y or n)?
-    2. Too low.  Try again.
-    3. Too High. Try again.
-    4. Too many tries.
-    */
-     
+void prob2(){     
      //Declare Variables
      int num,gNum,guess=0;
      char again;
@@ -192,12 +168,125 @@ void prob2(){
 
 //Begin Problem 3
 void prob3(){
+     /*
+     Problem 3
+     Create a function that fills one vector with even
+     random 2 digit numbers and another vector with
+     odd random numbers.  Prompt the user for the size
+     of these vectors.  Both will be the same size.
+     Output the results where you ask the user how
+     many columns to display.  These should be done
+     with 2 functions, fillVec and prntVec.
+     */
      
+     //Function Prototypes
+     void fillVec(vector<int> &,vector<int> &,int);
+     void prntVec(vector<int> &,vector<int> &,int,int);
+     
+     //Declare Variables
+     int size,col;
+     
+     //get size from user
+     cout<<"How many numbers would you like in each vector?"<<endl;
+     cin>>size;
+     
+     //declare arrays
+     vector <int> even(size);
+     vector <int> odd(size);
+     
+     //fill vectors
+     fillVec(even,odd,size);
+          
+     //get number of columns from user
+     cout<<"How many columns would you like to display?"<<endl;
+     cin>>col;
+     
+     //print vectors
+     prntVec(even,odd,size,col);
+     
+     cout<<endl<<endl;
             
 }//End main for Problem 3
 
+void fillVec(vector<int> &e,vector<int> &o,int n){
+     int r;
+     for(int i=0;i<n;i++){
+             do{
+                r=rand()%90+10;
+             }while(r%2!=0);
+             e[i]=r;
+             //cout<<e[i]<<endl;
+             do{
+                r=rand()%90+10;
+             }while(r%2!=1);
+             o[i]=r;
+             //cout<<o[i]<<endl;
+     }
+}
+
+void prntVec(vector<int> &e,vector<int> &o,int n,int c){
+     for(int i=0;i<n;i++){
+             cout<<e[i]<<" ";
+             if(i%c==(c-1))cout<<endl;
+     }
+     cout<<endl<<endl;
+     for(int i=0;i<n;i++){
+             cout<<o[i]<<" ";
+             if(i%c==(c-1))cout<<endl;
+     }
+}
+
 //Begin Problem 4
 void prob4(){
+/*
+Problem #4  (Random Sequence)
+        Create a function/method/procedure that
+returns a random number from the following set,
+{9,51,78,181,251}.  Loop 10000 times with this 
+procedure and print the frequency of each of 
+the 5 numbers obtained.  Hint: Use an array for 
+the sequence and frequency.  
+
+
+The following is a brief hint on items that might 
+be helpful in obtaining the results.  This is not 
+direct code but more pseudo code related.  Don't 
+try and run the following directly and more code 
+will be needed.
+
+
+Setup
+        const int n=5,ntimes=10000;
+        int freq[n]={0};
+        short int rndseq[]={9,51,78,181,251};
+
+
+Call to the routine to return a random sequence
+        retrand(rndseq,freq,n,ntimes);
+
+
+Results
+        cout<<rndseq[i]<<" occured "<<
+                freq[i]<<" times"<<endl;
+
+
+Sample Output
+        9 occured 2055 times
+        51 occured 1986 times
+        78 occured 1962 times
+        161 occured 2079 times
+        151 occured 1919 times
+
+
+Note:  Your results are not expected to be exactly
+the same!  After all these are pseudo-random 
+number sequences with different seeds.  
+*/     
+     
+     //Function Prototypes
+     
+     
+     //Declare Variables
      
      
 }//End main for Problem 4
@@ -205,6 +294,53 @@ void prob4(){
 
 //Begin Problem 5
 void prob5(){
+/*
+Problem #5  (All Kinds of Sorting)
+Sort a 10x15 array of characters.  Largest located
+at index [0][0-14] and smallest at index [9][0-14].  
+Create a procedure that passes the array to a print routine, 
+then a procedure that sorts the array and returns the sorted array 
+to the original procedure, and finish by using the same print routine.  
+Fill the array with
+
+
+Lcekoeddhoffbmb
+Lkcmggjcdhhglif
+Cgldjhcekjigcdd
+Cgldjhcekjigcdn
+Bffmdbkcenlafjk
+Fggdijijegfblln
+Jjlncnimjldfedj
+Amliglfohajcdmm
+Balgfcaelhfkgeb
+Kmlhmhcddfoeild
+
+
+Note:  This is a character array but the sorting is 
+done as if there are 10 strings with each string having 15 characters.  
+The output would be
+
+
+Lkcmggjcdhhglif
+Lcekoeddhoffbmb
+Kmlhmhcddfoeild
+Jjlncnimjldfedj
+Fggdijijegfblln
+Cgldjhcekjigcdn
+Cgldjhcekjigcdd
+Bffmdbkcenlafjk
+Balgfcaelhfkgeb
+Amliglfohajcdmm
+
+Full credit will be given if a file is used to read in the array.
+Name the file input.dat
+
+*/     
+     
+     //Function Prototypes
+     
+     
+     //Declare Variables
      
      
 }//End main for Problem 5
@@ -212,6 +348,54 @@ void prob5(){
 
 //Begin Problem 6
 void prob6(){
+/*
+Problem #6  (Spreadsheet Stuff)
+        Create the following input tables.  Output
+the sum of the rows, columns and grand total.  You
+will need to create procedures that print the table,
+then sum rows, columns and grand total, then pass
+that information to the same print routine.  Note:
+the 2 procedures printTable,SumTable and finally a
+call to printTable again are all invoked from subroutine 
+main.  I want to see each number formated to 6 spaces.  
+Print the table out exactly as below.
+
+
+Example Input Table
+   100   101   102   103   104   105
+   106   107   108   109   110   111
+   112   113   114   115   116   117
+   118   119   120   121   122   123
+   124   125   126   127   128   130
+Example Output Augmented Table with rows summed,
+columns summed and the grand total printed.
+   100   101   102   103   104   105   615
+   106   107   108   109   110   111   651
+   112   113   114   115   116   117   687
+   118   119   120   121   122   123   723
+   124   125   126   127   128   130   760
+   560   565   570   575   580   586  3436
+
+
+More credit will be given if you read the input and write 
+the results to a file.  However, if you can't do this in 
+a procedure then embed in the program.  But full credit 
+will not be given for the problem if files
+are not utilized. Name the files table.dat and augtable.dat
+
+
+Extra Credit
+New ordering, Instead of using 0123456789 to order
+numbers use the following 9874560321 to order.  I want to
+type in two 4 digit numbers and determine which is larger
+and smaller based upon the new ordering system.
+*/
+    
+     //Function Prototypes
+     
+     
+     //Declare Variables
+     
      
      
 }//End main for Problem 6
