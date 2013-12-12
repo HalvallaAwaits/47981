@@ -8,6 +8,7 @@
 #include <string>
 #include <fstream>
 #include <iomanip>
+#include <ctime>
 using namespace std;
 
 //Global Constants
@@ -25,6 +26,7 @@ void prob6();
 
 //Begin Execution Here!!!
 int main(){
+    srand(static_cast<unsigned int>(time(0)));
     short choice;
     do{
         Menu();
@@ -124,7 +126,67 @@ short rvNm(unsigned short n){
 
 //Begin Problem 2
 void prob2(){
+    /*
+    Problem 2
+    Write a program that plays the game "Guess the
+    Number" as follows.  Your program chooses the
+    number to be guessed by selecting an integer
+    at random in the range 1 to 500.  The program
+    displays
+    
+    
+    I have a number between 1 and 500
+    Can you guess my number?  You will be
+    given a maximum of 9 guesses.
+    Please type your first guess.
+    
+    
+    The player then types a guess.  The
+    program responds with one of the following.
+    
+    
+    1. Congratulations, You guessed the number!
+       Would you like to play again(y or n)?
+    2. Too low.  Try again.
+    3. Too High. Try again.
+    4. Too many tries.
+    */
      
+     //Declare Variables
+     int num,gNum,guess=0;
+     char again;
+     
+     do{
+          if(guess==0){
+               //set num to random num between 1-500
+               num=rand()%500+1;
+             
+               //Game Intro
+               cout<<"I have a number between 1 and 500."<<endl;
+               cout<<"Can you guess my number?  You will be"<<endl;
+               cout<<"given a maximum of 9 guesses."<<endl;
+               cout<<"Please type your first guess."<<endl;
+          }
+     
+         //player enters guess
+         cin>>gNum;
+         guess++;
+         
+         if(gNum==num){
+              cout<<"Congratulations, you guessed the number!"<<endl;
+              cout<<"Would you like to play again (y or n)?"<<endl;
+              cin>>again;
+              cout<<endl;
+              guess=0;
+              num=rand()%500+1;
+         }
+         else if(gNum<num)
+              cout<<"Too low. Try again."<<endl;
+         else if (gNum>num)
+              cout<<"Too high. Try again."<<endl;
+         else if(guess==9)
+              cout<<"Too many tries."<<endl;
+     }while(guess<=9);
     
 }//End main for Problem 2
 
