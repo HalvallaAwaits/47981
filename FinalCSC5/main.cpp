@@ -14,7 +14,6 @@
 using namespace std;
 
 //Global Constants
-const int COLS=15;//for prob5
 const int CLS=7;//for prob6
 
 //Function Prototypes
@@ -287,21 +286,19 @@ int retrand(short s[],int f[],int n,int nt){
 //Begin Problem 5
 void prob5(){
      //Function Prototypes
-     void prntArry(char [][COLS],int);
-     void srtArry(char [][COLS],int);
+     void prntArry(string [],int);
+     void srtArry(string [],int);
      
      //Declare Variables
      const int SIZE=10;
-     char array[SIZE][COLS];
+     string array[SIZE];
      
      //open and read in characters for 2d array
      ifstream inputFile;
      inputFile.open("input.dat");
      
      for(int i=0;i<SIZE;i++){
-          for(int j=0;j<COLS;j++){
-               inputFile>>array[i][j];
-          }
+          inputFile>>array[i];
      }
      
      //print the array
@@ -318,15 +315,29 @@ void prob5(){
      
 }//End main for Problem 5
 
-void prntArry(char a[][COLS],int n){
+void prntArry(string a[],int n){
      for(int i=0;i<n;i++){
-          for(int j=0;j<COLS;j++)
-               cout<<a[i][j];
-          cout<<endl;
+          cout<<a[i]<<endl;
      }
      cout<<endl<<endl;
 }
-void srtArry(char a[][COLS],int n){
+void srtArry(string a[],int n){
+     
+     //Push the array into a vector
+     vector<string>c;
+     for(int i=0;i<n;i++){
+         c.push_back(a[i]);
+     }
+     //Sort it and reverse
+     sort(c.begin(),c.end());
+     reverse(c.begin(),c.end());
+     
+     //Push info back into an array
+     for(int i=0;i<n;i++){
+         a[i]=c[i];
+     }
+     
+     /*
      char temp[COLS];
      
      for(int i=0;i<(n-1);i++){
@@ -344,15 +355,8 @@ void srtArry(char a[][COLS],int n){
                     a[i+1][j]=temp[j];
                }
           }
-          /*for(int j=0;j<COLS;j++){
-              if(a[i][j]<a[i+1][j]){
-                   temp[j]=a[i][j];
-                   a[i][j]=a[i+1][j];
-                   a[i+1][j]=temp[j];
-              }
-              
-          }*/
      }
+     */
 }
 
 //Begin Problem 6
@@ -395,6 +399,10 @@ void prob6(){
                if(j%(CLS)==(CLS-1))outputFile<<endl;
           }
      }
+     
+     //close files
+     inputFile.close();
+     outputFile.close();
      
 }//End main for Problem 6
 
