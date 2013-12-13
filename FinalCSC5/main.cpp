@@ -14,6 +14,8 @@
 using namespace std;
 
 //Global Constants
+const int COLS=15;//for prob5
+const int CLS=7;//for prob6
 
 //Function Prototypes
 void Menu();
@@ -238,167 +240,203 @@ void prntVec(vector<int> &e,vector<int> &o,int n,int c){
 
 //Begin Problem 4
 void prob4(){
-/*
-Problem #4  (Random Sequence)
-        Create a function/method/procedure that
-returns a random number from the following set,
-{9,51,78,181,251}.  Loop 10000 times with this 
-procedure and print the frequency of each of 
-the 5 numbers obtained.  Hint: Use an array for 
-the sequence and frequency.  
-
-
-The following is a brief hint on items that might 
-be helpful in obtaining the results.  This is not 
-direct code but more pseudo code related.  Don't 
-try and run the following directly and more code 
-will be needed.
-
-
-Setup
-        const int n=5,ntimes=10000;
-        int freq[n]={0};
-        short int rndseq[]={9,51,78,181,251};
-
-
-Call to the routine to return a random sequence
-        retrand(rndseq,freq,n,ntimes);
-
-
-Results
-        cout<<rndseq[i]<<" occured "<<
-                freq[i]<<" times"<<endl;
-
-
-Sample Output
-        9 occured 2055 times
-        51 occured 1986 times
-        78 occured 1962 times
-        161 occured 2079 times
-        151 occured 1919 times
-
-
-Note:  Your results are not expected to be exactly
-the same!  After all these are pseudo-random 
-number sequences with different seeds.  
-*/     
-     
      //Function Prototypes
-     
+     int retrand(short [],int [],int,int);
      
      //Declare Variables
+     const int n=5,ntimes=10000;
+     int freq[n]={0};
+     int rnd;
+     short int rndseq[]={9,51,78,181,251};
+     
+     cout<<"Random number sequence rolled 10k times: 9,51,78,181,251"<<endl;
+     
+     //get sequence and increment
+     for(int i=0;i<ntimes;i++){
+         //get sequence
+         rnd=retrand(rndseq,freq,n,ntimes);
+         
+         //increment count for each occurrance
+         if(rnd==rndseq[0])freq[0]++;
+         if(rnd==rndseq[1])freq[1]++;
+         if(rnd==rndseq[2])freq[2]++;
+         if(rnd==rndseq[3])freq[3]++;
+         if(rnd==rndseq[4])freq[4]++;
+     }
+     
+     //output results
+     for(int i=0;i<n;i++)
+          cout<<rndseq[i]<<" occured "<<freq[i]<<" times"<<endl;
+     cout<<endl<<endl;
      
      
 }//End main for Problem 4
 
+int retrand(short s[],int f[],int n,int nt){
+     int r;
+     
+     r=rand()%5+1;
+     if(r==1)return s[0];
+     if(r==2)return s[1];
+     if(r==3)return s[2];
+     if(r==4)return s[3];
+     if(r==5)return s[4];
+     
+}
 
 //Begin Problem 5
 void prob5(){
-/*
-Problem #5  (All Kinds of Sorting)
-Sort a 10x15 array of characters.  Largest located
-at index [0][0-14] and smallest at index [9][0-14].  
-Create a procedure that passes the array to a print routine, 
-then a procedure that sorts the array and returns the sorted array 
-to the original procedure, and finish by using the same print routine.  
-Fill the array with
-
-
-Lcekoeddhoffbmb
-Lkcmggjcdhhglif
-Cgldjhcekjigcdd
-Cgldjhcekjigcdn
-Bffmdbkcenlafjk
-Fggdijijegfblln
-Jjlncnimjldfedj
-Amliglfohajcdmm
-Balgfcaelhfkgeb
-Kmlhmhcddfoeild
-
-
-Note:  This is a character array but the sorting is 
-done as if there are 10 strings with each string having 15 characters.  
-The output would be
-
-
-Lkcmggjcdhhglif
-Lcekoeddhoffbmb
-Kmlhmhcddfoeild
-Jjlncnimjldfedj
-Fggdijijegfblln
-Cgldjhcekjigcdn
-Cgldjhcekjigcdd
-Bffmdbkcenlafjk
-Balgfcaelhfkgeb
-Amliglfohajcdmm
-
-Full credit will be given if a file is used to read in the array.
-Name the file input.dat
-
-*/     
-     
      //Function Prototypes
-     
+     void prntArry(char [][COLS],int);
+     void srtArry(char [][COLS],int);
      
      //Declare Variables
+     const int SIZE=10;
+     char array[SIZE][COLS];
      
+     //open and read in characters for 2d array
+     ifstream inputFile;
+     inputFile.open("input.dat");
+     
+     for(int i=0;i<SIZE;i++){
+          for(int j=0;j<COLS;j++){
+               inputFile>>array[i][j];
+          }
+     }
+     
+     //print the array
+     prntArry(array,SIZE);
+     
+     //sort the array
+     srtArry(array,SIZE);
+     
+     //print sorted array
+     prntArry(array,SIZE);
+     
+     //close file
+     inputFile.close();
      
 }//End main for Problem 5
-   
+
+void prntArry(char a[][COLS],int n){
+     for(int i=0;i<n;i++){
+          for(int j=0;j<COLS;j++)
+               cout<<a[i][j];
+          cout<<endl;
+     }
+     cout<<endl<<endl;
+}
+void srtArry(char a[][COLS],int n){
+     char temp[COLS];
+     
+     for(int i=0;i<(n-1);i++){
+          if(a[i][0]<a[i+1][0]){
+               for(int j=0;j<COLS;j++){
+                    temp[j]=a[i][j];
+                    a[i][j]=a[i+1][j];
+                    a[i+1][j]=temp[j];
+               }
+          }
+          if(a[i][0]==a[i+1][0]){
+               for(int j=0;j<COLS;j++){
+                    temp[j]=a[i][j];
+                    a[i][j]=a[i+1][j];
+                    a[i+1][j]=temp[j];
+               }
+          }
+          /*for(int j=0;j<COLS;j++){
+              if(a[i][j]<a[i+1][j]){
+                   temp[j]=a[i][j];
+                   a[i][j]=a[i+1][j];
+                   a[i+1][j]=temp[j];
+              }
+              
+          }*/
+     }
+}
 
 //Begin Problem 6
 void prob6(){
-/*
-Problem #6  (Spreadsheet Stuff)
-        Create the following input tables.  Output
-the sum of the rows, columns and grand total.  You
-will need to create procedures that print the table,
-then sum rows, columns and grand total, then pass
-that information to the same print routine.  Note:
-the 2 procedures printTable,SumTable and finally a
-call to printTable again are all invoked from subroutine 
-main.  I want to see each number formated to 6 spaces.  
-Print the table out exactly as below.
-
-
-Example Input Table
-   100   101   102   103   104   105
-   106   107   108   109   110   111
-   112   113   114   115   116   117
-   118   119   120   121   122   123
-   124   125   126   127   128   130
-Example Output Augmented Table with rows summed,
-columns summed and the grand total printed.
-   100   101   102   103   104   105   615
-   106   107   108   109   110   111   651
-   112   113   114   115   116   117   687
-   118   119   120   121   122   123   723
-   124   125   126   127   128   130   760
-   560   565   570   575   580   586  3436
-
-
-More credit will be given if you read the input and write 
-the results to a file.  However, if you can't do this in 
-a procedure then embed in the program.  But full credit 
-will not be given for the problem if files
-are not utilized. Name the files table.dat and augtable.dat
-
-
-Extra Credit
-New ordering, Instead of using 0123456789 to order
-numbers use the following 9874560321 to order.  I want to
-type in two 4 digit numbers and determine which is larger
-and smaller based upon the new ordering system.
-*/
-    
      //Function Prototypes
-     
+     void prntTble(int [][CLS],int,int &);
+     void sumTble(int [][CLS],int);
      
      //Declare Variables
+     const int ROWS=6;
+     int table[ROWS][CLS]={0};
+     int cnt=0;
      
+     //read in table from file
+     ifstream inputFile;
+     inputFile.open("table.dat");
      
+     for(int i=0;i<ROWS-1;i++){
+          for(int j=0;j<CLS-1;j++){
+               inputFile>>table[i][j];
+          }
+     }
+     
+     //print original
+     prntTble(table,ROWS,cnt);
+     
+     //sum it all up
+     sumTble(table,ROWS);
+     
+     //print augmented
+     prntTble(table,ROWS,cnt);
+     
+     //output augmented table to file
+     ofstream outputFile;
+     outputFile.open("augtable.dat");
+     
+     for(int i=0;i<ROWS;i++){
+          for(int j=0;j<CLS;j++){
+               outputFile<<table[i][j]<<"   ";
+               if(j%(CLS)==(CLS-1))outputFile<<endl;
+          }
+     }
      
 }//End main for Problem 6
+
+void prntTble(int a[][CLS],int n,int &cnt){
+     if(cnt==0){
+         for(int i=0;i<n-1;i++){
+              for(int j=0;j<CLS-1;j++){
+                   cout<<setw(6)<<a[i][j];
+                   if(j%(CLS-1)==(CLS-2))cout<<endl;
+              }
+         }
+     cout<<endl;
+     cnt++;
+     return;
+     }
+     
+     if(cnt==1){
+          for(int k=0;k<n;k++){
+              for(int l=0;l<CLS;l++){
+                   cout<<setw(6)<<a[k][l];
+                   if(l%(CLS)==(CLS-1))cout<<endl;
+              }
+         }
+     cout<<endl;
+     }
+}
+
+void sumTble(int a[][CLS],int n){
+     //get column totals
+     for(int i=0;i<n;i++){
+          for(int j=0;j<CLS-2;j++){
+               a[n-1][i]+=a[j][i];
+          }
+     }
+     
+     //get row totals
+     for(int k=0;k<CLS-1;k++){
+          for(int l=0;l<CLS-1;l++){
+               a[k][CLS-1]+=a[k][l];
+          }
+     }     
+}
 
 void dflt(short val){
         cout<<"You typed "<<val<<" to exit the program"<<endl;
